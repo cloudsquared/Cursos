@@ -1,6 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { filter, from, fromEvent, map, pluck, range, reduce, scan, switchMap, tap } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
+interface IPersonaje {
+  tipo: Categoria,
+  nombre: string,
+  nivel: number
+}
+type Categoria = "heroe" | "villano";
+
 @Component({
   selector: 'app-operadores',
   templateUrl: './operadores.component.html',
@@ -11,6 +18,38 @@ export class OperadoresComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+
+    const personajes: Array<IPersonaje> = [
+      {
+        nombre: "Batman",
+        tipo: "heroe",
+        nivel: 5
+      },
+      {
+        nombre: "Robin",
+        tipo: "heroe",
+        nivel: 3
+      },
+      {
+        nombre: "Joker",
+        tipo: "villano",
+        nivel: 5
+      }
+    ]
+
+    for (let index = 0; index < personajes.length; index++) {
+      const element = personajes[index];
+      console.log(element);
+
+    }
+
+    for (let element of personajes) {
+      console.log(element);
+    }
+
+    //console.log(personajes);
+    return;
+
 
     //map 
     range(1, 10).pipe(
@@ -30,29 +69,9 @@ export class OperadoresComponent implements OnInit {
     const keyup2$ = fromEvent<KeyboardEvent>(document, 'keyup');
     keyup2$.pipe(pluck('code')).subscribe(val => console.log('pluck', val))
 
-    interface IPersonaje {
-      tipo: string,
-      nombre: string,
-      nivel: number
-    }
 
-    const personajes: Array<IPersonaje> = [
-      {
-        nombre: "Batman",
-        tipo: "heroe",
-        nivel: 5
-      },
-      {
-        nombre: "Robin",
-        tipo: "heroe",
-        nivel: 3
-      },
-      {
-        nombre: "Joker",
-        tipo: "villano",
-        nivel: 5
-      }
-    ]
+
+
     //from + filter + map
     from(personajes).pipe(
       filter(p => p.tipo == 'villano'),
@@ -73,9 +92,9 @@ export class OperadoresComponent implements OnInit {
     //scan 
     from(niveles).pipe(scan(reducer)).subscribe(console.log);
 
-    const body = document.querySelector('body');   
+    const body = document.querySelector('body');
     const textInput = document.createElement('input');
-    body!.append( textInput );
+    body!.append(textInput);
     const input$ = fromEvent<KeyboardEvent>(textInput, "keyup");
 
     const url = 'https://httpbin.org/delay/2?arg='
